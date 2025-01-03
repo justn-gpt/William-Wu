@@ -57,13 +57,12 @@ EOF
 }
 
 generate_config() {
-
+    # 生成证书和私钥
     openssl ecparam -genkey -name prime256v1 -out "private.key"
     openssl req -new -x509 -days 3650 -key "private.key" -out "cert.pem" -subj "/CN=$USERNAME.serv00.net"
 
     yellow "正在进行连通性测试，请稍等..."
-    available_ips=$(get_ip)
-    purple "$available_ips"
+    get_ip
   
   cat > config.json << EOF
 {
@@ -312,28 +311,34 @@ get_argodomain() {
 }
 
 get_ip() {
+    API_URL="https://status.eooce.com/api"
     IP_LIST=($(devil vhost list | awk '/^[0-9]+/ {print $1}'))
-
     AVAILABLE_IPS=""
-    for IP in "${IP_LIST[@]}"; do
-        RESPONSE=$(curl -s 'https://api.ycwxgzs.com/ipcheck/index.php' --data "ip=$IP&port=22" | jq -r '.tcp, .icmp' | sed 's/<[^>]*>//g')
-        if [[ $RESPONSE =~ "端口可用" && $RESPONSE =~ "IP可用" ]]; then
-            AVAILABLE_IPS+=" $IP(通)"
-        else
-            AVAILABLE_IPS+=" $IP(不通)"
-        fi
-    done
-
+    RESPONSIVE_IPS=()
     IP1=""
     IP2=""
     IP3=""
     IP4=""
 
-    RESPONSIVE_IPS=()
+    MAX_RETRIES=2
     for IP in "${IP_LIST[@]}"; do
-        RESPONSE=$(curl -s 'https://api.ycwxgzs.com/ipcheck/index.php' --data "ip=$IP&port=22" | jq -r '.tcp, .icmp' | sed 's/<[^>]*>//g')
-        if [[ $RESPONSE =~ "端口可用" && $RESPONSE =~ "IP可用" ]]; then
+        SUCCESS=false
+        for ((i = 1; i <= MAX_RETRIES; i++)); do
+            RESPONSE=$(curl -s "$API_URL/$IP")
+            STATUS=$(echo "$RESPONSE" | jq -r '.status')
+            if [[ "$STATUS" == "Available" ]]; then
+                SUCCESS=true
+                break
+            elif [[ "$STATUS" == "Blocked" ]]; then
+                break
+            fi
+        done
+
+        if $SUCCESS; then
             RESPONSIVE_IPS+=($IP)
+            AVAILABLE_IPS+=" $IP(通)"
+        else
+            AVAILABLE_IPS+=" $IP(不通)"
         fi
     done
 
@@ -351,15 +356,9 @@ get_ip() {
         IP4=${RESPONSIVE_IPS[1]}
     fi
 
-    echo "$AVAILABLE_IPS"
-    IP1=$IP1
-    IP2=$IP2
-    IP3=$IP3
-    IP4=$IP4
-    AVAILABLE_IPS=$AVAILABLE_IPS
+    purple "$AVAILABLE_IPS"
 }
 
-get_ip
 
 get_links(){
 argodomain=$(get_argodomain)
