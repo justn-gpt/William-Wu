@@ -12,6 +12,8 @@ sb_00.sh是为了解决s14的YouTube播放卡59秒问题和s15的twitch无法播
 
 还有一个需要注意的是，这个脚本在开始运行的时候会对当前serv00服务器的三个入口做连通性检测，必须起码有两个IP连通性检测结果是(通)，这个脚本才会运行正常，不过我的serv00都是有两个入口国内是通的，所以我就没有在脚本里写不满足条件时候的判断(懒)。
 
+魔改版本去掉了vmess改成了vless，所以脚本运行后提供的所有协议为 socks5|vless-ws-tls(argo)|hysteria2|tuic 
+
 这个魔改脚本所有的变量是TCP_PORT UDP_PORT 可选变量： BESZEL_KEY SOCKSU SOCKSP ARGO_DOMAIN ARGO_AUTH CFIP CFPORT
 
 TCP_PORT=TCP端口号 UDP_PORT=UDP端口号 bash <(curl -Ls https://github.com/Neomanbeta/shell-scripts/raw/refs/heads/main/sb_00.sh)
