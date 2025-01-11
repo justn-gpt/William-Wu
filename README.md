@@ -14,6 +14,6 @@ sb_00.sh是为了解决s14的YouTube播放卡59秒问题和s15的twitch无法播
 
 魔改版本去掉了vmess改成了vless，所以脚本运行后提供的所有协议为 socks5|vless-ws-tls(argo)|hysteria2|tuic 
 
-这个魔改脚本所有的变量是TCP_PORT UDP_PORT 可选变量： BESZEL_KEY SOCKSU SOCKSP ARGO_DOMAIN ARGO_AUTH CFIP CFPORT
+这个魔改脚本所有的变量是TCP_PORT UDP_PORT 可选变量： UUID BESZEL_KEY SOCKSU SOCKSP ARGO_DOMAIN ARGO_AUTH CFIP CFPORT
 
 TCP_PORT=TCP端口号 UDP_PORT=UDP端口号 bash <(curl -Ls https://github.com/Neomanbeta/shell-scripts/raw/refs/heads/main/sb_00.sh)
