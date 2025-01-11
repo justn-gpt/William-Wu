@@ -156,13 +156,21 @@ generate_config() {
  ],
   "outbounds": [
     {
-      "type": "socks",
-      "tag": "socks5_outbound",
-      "server": "s9.serv00.com",
-      "server_port": 1766,
-      "version": "5",
-      "username": "oneforall",
-      "password": "allforone"
+      "type": "wireguard",
+      "tag": "wireguard-out",
+      "server": "engage.cloudflareclient.com",
+      "server_port": 2408,
+      "local_address": [
+        "172.16.0.2/32",
+        "2606:4700:110:812a:4929:7d2a:af62:351c/128"
+      ],
+      "private_key": "gBthRjevHDGyV0KvYwYE52NIPy29sSrVr6rcQtYNcXA=",
+      "peer_public_key": "bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=",
+      "reserved": [
+        6,
+        146,
+        6
+      ]
     },
     {
       "tag": "direct",
@@ -177,10 +185,9 @@ generate_config() {
     "rules": [
       {
         "domain": [
-          "usher.ttvnw.net",
           "jnn-pa.googleapis.com"
         ],
-        "outbound": "socks5_outbound"
+        "outbound": "wireguard-out"
       }
     ],
   "final": "direct"
@@ -382,7 +389,7 @@ cat list.txt
 purple "\n$WORKDIR/list.txt saved successfully"
 purple "Running done!"
 yellow "这是Serv00 S14 S15专用的魔改老王四合一脚本(socks5|vless-ws-tls(argo)|hysteria2|tuic)\n"
-echo -e "${green}解决的问题：${re}${yellow}S14不能正常播放YouTube，S15不能正常播放Twitch的问题${re}\n"
+echo -e "${green}解决的问题：${re}${yellow}S14不能正常播放YouTube卡59秒的问题${re}\n"
 echo -e "${green}反馈：${re}${yellow}不要去找老王就行，魔改没有售后${re}\n"
 echo -e "${green}TG反馈：${re}${yellow}你可以在https://t.me/CMLiussss里找到我 @RealNeoMan${re}\n"
 purple "转载请著名出处，请勿滥用\n"
